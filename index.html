@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div
+        class="container"
+    >
+        <input type="text" placeholder="seller_id">
+        <input type="text" placeholder="site_id">
+        <input type="text" placeholder="token">
+
+        <button>
+            click
+        </button>
+    </div>
+
+    <script>
+        document.onreadystatechange = function () {
+            if (document.readyState === "interactive") {
+                // curl -X GET -H 'Authorization: Bearer APP_USR-5720666187277146-121200-1985201e2e487893636e91a42a4a6243-195555582' https://api.mercadolibre.com/sites/MLA/search?seller_id=179571326
+
+                let auxCategories = [];
+                let auxProducts = [];
+
+                const run = async () => {
+                    await fetch('https://api.mercadolibre.com/sites/MLA/search?seller_id=179571326', {
+                        headers:{
+                            'Authorization': 'Bearer APP_USR-5720666187277146-121200-1985201e2e487893636e91a42a4a6243-195555582'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then((data) => {
+                        for (let i = 0; i < data.results.length; i++) {
+                            const item = data.results[i];
+                            auxProducts.push({
+                                "id": item.id,
+                                "title": item.title,
+                                "category_id": item.category_id,
+                                "category_name": ''
+                            });
+                            auxCategories.push(item.category_id)
+                        }
+                    });
+
+                    function onlyUnique(value, index, self) {
+                        return self.indexOf(value) === index;
+                    }
+
+                    // usage example:
+                    const uniqueCategories = auxCategories.filter(onlyUnique);
+
+                    for (let i = 0; i < uniqueCategories.length; i++) {
+                        const categoryId = uniqueCategories[i];
+                        await fetch(`https://api.mercadolibre.com/categories/${categoryId}`, {
+                            headers:{
+                                'Authorization': 'Bearer APP_USR-5720666187277146-121200-1985201e2e487893636e91a42a4a6243-195555582'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then((data) => {
+                            for (let x = 0; x < auxProducts.length; x++) {
+                                const product = auxProducts[x];
+                                if (product.category_id == data.id) {
+                                    product.category_name = data.name;
+                                }
+                            }
+                        });
+                    }
+
+                   
+                    
+                    // var encodedUri = encodeURI(csvContent);
+                    // var link = document.createElement("a");
+                    // console.log(encodedUri);
+                    // link.setAttribute("href", encodedUri);
+                    // link.setAttribute("download", "my_data.csv");
+                    // document.body.appendChild(link); 
+                    // link.click();
+                }
+
+                run();
+            }
+        };
+    </script>
+</body>
+</html>

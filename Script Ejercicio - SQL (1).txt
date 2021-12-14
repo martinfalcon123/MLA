@@ -1,0 +1,30 @@
+/* Código utilizado: MySQL */
+
+CREATE TABLE Carrier(CarrierID INT PRIMARY KEY NOT NULL, Name VARCHAR(50) NOT NULL, Capacity INT NOT NULL);
+CREATE TABLE Cantidad_de_envíos(zona VARCHAR(30) PRIMARY KEY NOT NULL, mes INT NOT NULL, cantidad_de_envíos INT NOT NULL);
+CREATE TABLE COSTOS(CarrierID INT NOT NULL, zona VARCHAR(30) NOT NULL, costo INT NOT NULL, Tiempo_de_Entrega INT NOT NULL);
+
+ALTER TABLE COSTOS ADD FOREIGN KEY(CarrierID) REFERENCES Carrier(CarrierID);
+ALTER TABLE Cantidad_de_envíos ADD FOREIGN KEY(zona) REFERENCES Cantidad_de_envíos(zona);
+
+INSERT INTO Carrier VALUES(1, "Carrier A", 10000), (2, "Carrier B", 10000), (3, "Carrier C", 3000);
+
+INSERT INTO Cantidad_de_envíos VALUES("AMBA", 1, 40000), ("Bs As", 1, 50000), ("Resto", 1, 60000);
+
+INSERT INTO COSTOS VALUES(1, "AMBA", 10, 3), (1, "Bs As", 20, 5), (1, "Resto", 50, 7), (2, "AMBA", 15, 2), (2, "Bs As", 19, 4),
+(2, "Resto", 55, 6), (3, "AMBA", 20, 1);
+
+SELECT COSTOS.CarrierID, SUM(Cantidad_de_envíos.cantidad_de_envíos * COSTOS.costo) AS COSTOS FROM Cantidad_de_envíos
+INNER JOIN COSTOS  ON (Cantidad_de_envíos.zona = COSTOS.zona) WHERE Cantidad_de_envíos.mes LIKE 1 GROUP BY COSTOS.CarrierID
+ORDER BY COSTOS.CarrierID;
+
+/* La query produce el siguiente output*/
+
++----------------+-------------+
+| CarrierID      | COSTOS      | 
++----------------+-------------+
+| 1              | 4400000     |
+| 2              | 4850000     |
+| 3              | 800000      |
++----------------+-------------+
+
