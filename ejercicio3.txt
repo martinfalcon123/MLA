@@ -1,0 +1,6 @@
+en la lectura y compresion del sript basico 
+lo que busca como ouput es imprimir por pantalla la sucursal, la fecha, la desripcion de todos los pedidos a realizar
+
+en el script basico bash 
+da una lista de seller utilizando la api de mercado libre da todas las preferencias de ese seller en particular y lo imprime por pantalla cada una de esas preferencias de cada seller por eso recorre con el for y con el curl va a bucar usando la api y la preferencias de estado de cada uno de los usuarios.
+ 
