@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <h1>Listado</h1>
+
+    <div id="listado">
+        
+    </div>
+
+
+<script>
+
+        var listado = document.querySelector("#listado");
+
+        var usuarios =[];
+   
+    fetch('https://api.mercadolibre.com/sites/MLA/search?seller_id=179571326')
+        .then(data => data.json())
+        .then(users => {
+            usuarios = users.results;
+            console.log(usuarios);   
+
+            usuarios.map((user, i)=>{
+                let nombre = document.createElement('h2');
+
+                nombre.innerHTML = i + ' . ' + user.id + " " + user.title + " " + user.category_id;// + " " + user.name;
+
+                listado.appendChild(nombre);
+            
+
+            });
+
+     });
+                                
+
+    </script>
+  
+   
+</body>
+</html>
