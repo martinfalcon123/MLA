@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+<style>
+    
+    table{
+        background-color:white;
+        text-align: left;
+        width: 100%;
+    }
+
+    th, td{
+        border: solid 1px black;
+        padding: 0;
+    }
+</style>
+<body>
+
+
+
+    <div class="container">
+        <div class="section">
+
+            
+            <table id="example-table">
+                <thead>
+                      <tr>
+                            <td>TITLE</td>
+                            <td>ID</td>
+                            <td>CATEGORY_ID</td>
+                </tr> 
+                </thead>
+             <tbody id="res">
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+
+
+<script>
+
+        var listado = document.querySelector("#res");
+
+        var usuarios =[];
+   
+    fetch('https://api.mercadolibre.com/sites/MLA/search?seller_id=179571326')
+        .then(data => data.json())
+        .then(users => {
+            usuarios = users.results;
+            console.log(usuarios);   
+           
+            let res = document.querySelector("#res");
+
+            res.innerHTML = '';
+
+            for(let item of usuarios){
+                //console.log(item.title);
+
+                res.innerHTML +=`
+                 <tr>
+                            <td>${item.id}</td>
+                            <td>${item.title}</td>
+                            <td>${item.category_id}</td>
+                            
+
+
+                            
+
+                </tr>   
+
+                `
+            }
+            });
+
+ 
+
+
+
+    </script>
+  
+   
+</body>
+</html>
